@@ -9,6 +9,9 @@ function Index() {
                 <br />
                 <a href="/dashboard" className="font-medium text-red-600 hover:text-indigo-500">
                     Dashboard Page
+                </a> <br />
+                <a href="/register" className="font-medium text-red-600 hover:text-indigo-500">
+                    Register page
                 </a>
             </div>
         </>

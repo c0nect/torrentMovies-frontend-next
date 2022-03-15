@@ -16,10 +16,17 @@ type SignInData = {
     password: string;
 }
 
+type SignUpData = {
+    name: string;
+    email: string;
+    password: string;
+}
+
 type AuthContextType = {
     isAuthenticated: boolean;
     user: User;
     signIn: (data: SignInData) => Promise<void>;
+    signUp: (data: SignUpData) => Promise<void>;
 }
 
 export const AuthContext = createContext({} as AuthContextType)
@@ -62,29 +69,23 @@ export function AuthProvider({ children }) {
             .catch(error => {
                 console.log(error)
             })
+    }
 
-        // const { token , user } = await fetch('http://localhost:3000/api/v1/login/', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
+    async function signUp({ name, email, password}: SignUpData) {
+        apiUrl.post(`/users/`, { name, email, password })
+            .then(response => {
+                const data = response
+                console.log(data)
 
-        //     body: JSON.stringify({ email, password })
-        // }).then(res => res.json())
-
-        // setCookie(undefined, 'jwt', token, {
-        //     maxAge: 60 * 60 * 1, // 1 hour
-        // })
-
-
-        // apiUrl.defaults.headers['Authorization'] = `Bearer ${token}`
-
-        // setUser(user)
-        // Router.push('/dashboard')
+                signIn({ email, password })
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, signIn }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, signIn, signUp }}>
             {children}
         </AuthContext.Provider>
     )
